@@ -42,14 +42,14 @@
 
 .inputWrapper {
   position: relative;
-  align-items: flex-start;
+  display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  padding: 6px;
+  padding: 6px 12px;
   min-height: 42px;
   width: 100%;
-  max-height: 120px;
   overflow-y: auto;
+  max-height: 120px;
   scrollbar-width: thin;
   scrollbar-color: #d1d5db transparent;
   box-sizing: border-box;
@@ -72,9 +72,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  flex: 1;
+  width: 100%;
   min-width: 0;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .selectedItem {
@@ -134,7 +134,9 @@
   background-color: transparent;
   outline: none;
   color: #1f2937;
-  line-height: 1.5;
+  line-height: 30px;
+  height: 30px;
+  padding: 0;
 }
 
 .input::placeholder {
@@ -143,6 +145,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 30px;
 }
 
 .input:disabled {
@@ -150,20 +153,27 @@
   cursor: not-allowed;
 }
 
-/* Styles for single-select input */
-.input:not(.multiInput) {
-  padding: 4px 28px 4px 8px;
-  height: 32px;
-}
-
 /* Styles for multi-select input */
 .multiInput {
   margin: 0;
   padding: 0 4px;
-  min-height: 24px;
-  flex-basis: 120px;
-  flex-grow: 1;
-  height: 24px;
+  min-height: 30px;
+  width: 100%;
+  flex: 1;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.multiInput::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+/* Container styles */
+.wrapper:has(.multiInput) {
+  display: flex;
+  flex-direction: column;
 }
 
 /* Clear button styles for single-select */
