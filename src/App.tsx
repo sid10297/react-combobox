@@ -8,15 +8,17 @@ function App() {
       <h1>React Combobox</h1>
       <Combobox
         options={options}
-        placeholder="Select an option"
+        placeholder="Select Option"
         id="single-fruit-combobox"
+        label="Single Select"
       />
 
       <Combobox
         options={options}
-        placeholder="Select multiple options"
+        placeholder="Select Options"
         id="multi-fruit-combobox"
         isMulti={true}
+        label="Multi Select"
       />
     </div>
   );
