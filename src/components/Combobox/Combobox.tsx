@@ -48,6 +48,7 @@ const Combobox: React.FC<ComboboxProps> = ({
     selectedItems,
     removeSelectedItem,
     selectedOption,
+    setSelectedId,
   } = useCombobox({
     options,
     onSelect,
@@ -126,7 +127,6 @@ const Combobox: React.FC<ComboboxProps> = ({
                     className={styles.removeItem}
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => removeSelectedItem(item)}
-                    aria-label={`Remove ${item.label}`}
                   >
                     ×
                   </button>
@@ -148,8 +148,6 @@ const Combobox: React.FC<ComboboxProps> = ({
                 ? "Type to search..."
                 : placeholder
             }
-            aria-autocomplete="list"
-            aria-controls={listboxId}
             disabled={disabled}
             autoComplete="off"
             style={{ width: getInputWidth(inputValue) }}
@@ -163,38 +161,65 @@ const Combobox: React.FC<ComboboxProps> = ({
                 className={styles.clear}
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={clearInput}
-                aria-label="Clear input"
               >
                 ×
               </button>
             )}
-          {loading && <div className={styles.spinner} aria-label="Loading" />}
+          {loading && <div className={styles.spinner} />}
         </div>
-        {error && (
-          <div className={styles.errorMessage} role="alert">
-            {error}
-          </div>
-        )}
+        {error && <div className={styles.errorMessage}>{error}</div>}
         {isOpen && (
-          <ul id={listboxId} role="listbox" className={styles.dropdown}>
+          <ul
+            id={listboxId}
+            role="listbox"
+            className={styles.dropdown}
+            tabIndex={-1}
+            onKeyDown={(e: React.KeyboardEvent<HTMLElement>) =>
+              handleKeyDown(e)
+            }
+          >
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <li
                   key={option.id}
                   id={`${id}-option-${option.id}`}
                   role="option"
-                  aria-selected={option.id === selectedId}
+                  aria-selected={
+                    option.id === selectedId ||
+                    (!isMulti && option.id === selectedOption?.id)
+                  }
                   className={`${styles.option} ${
-                    option.id === selectedId ? styles.selected : ""
+                    option.id === selectedId ||
+                    (!isMulti && option.id === selectedOption?.id)
+                      ? styles.selected
+                      : ""
                   }`}
                   onMouseDown={(e) => handleOptionMouseDown(e, option)}
+                  onMouseEnter={() => setSelectedId(option.id)}
+                  onFocus={() => setSelectedId(option.id)}
                 >
-                  {option.label}
+                  <span className={styles.optionContent}>
+                    {option.label}
+                    {(option.id === selectedId ||
+                      (!isMulti && option.id === selectedOption?.id)) && (
+                      <span className={styles.checkmark}>✓</span>
+                    )}
+                  </span>
                 </li>
               ))
             ) : (
-              <li className={styles.noResults} role="status">
-                {loading ? "Loading..." : "No results found"}
+              <li className={styles.noResults}>
+                {loading ? (
+                  <div className={styles.loadingContainer}>
+                    <div className={styles.spinner} />
+                    <span>Loading...</span>
+                  </div>
+                ) : (
+                  <div className={styles.noResultsContent}>
+                    <span className={styles.noResultsIcon}>🔍</span>
+                    <span>No results found</span>
+                  </div>
+                )}
               </li>
             )}
           </ul>

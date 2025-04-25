@@ -114,7 +114,7 @@ export const useCombobox = ({
   }, [isMulti]);
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
+    (e: React.KeyboardEvent<HTMLElement>) => {
       let nextIndex: number;
       let nextOption: Option | undefined;
       let prevIndex: number;
